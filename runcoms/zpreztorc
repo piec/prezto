@@ -32,7 +32,17 @@ zstyle ':prezto:load' pmodule \
   'spectrum' \
   'utility' \
   'completion' \
-  'prompt'
+  'prompt' \
+  'bundle'
+
+#
+# Bundle
+#
+
+zstyle ':prezto:module:bundle' install-path "${ZDOTDIR:-$HOME}"/.zprezto/bundles
+zstyle ':prezto:module:bundle' modules \
+  'piec/k-prezto'
+  #'piec/powerline-prezto'
 
 #
 # Editor
