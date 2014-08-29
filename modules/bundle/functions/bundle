@@ -1,0 +1,82 @@
+# vim: set ft=sh:ts=2:sw=0:sts=-1:
+#
+# Installs modules using git
+# Loads modules
+#
+# Authors:
+#   Pierre Carru <pierre.carru@gmail.com>
+#
+
+local -a modules
+local install_path
+
+zstyle -a ':prezto:module:bundle' modules modules
+zstyle -s ':prezto:module:bundle' install-path install_path
+
+function _bundle_dirname {
+  echo "${1:t}"
+}
+
+function _bundle_path {
+  echo "$install_path/$(_bundle_dirname $1)"
+}
+
+function _cmd_install {
+  if [[ $#argv != 0 ]] modules=("$argv[@]")
+
+  (
+    set -e
+    mkdir -p "$install_path"
+
+    for module in $modules; do
+      echo module="'$module'"
+      if [[ ! -e "$(_bundle_path $module)" ]] ; then
+        git clone --recursive -- "https://github.com/${module}.git" "$(_bundle_path $module)"
+      fi
+    done
+  )
+}
+
+function _cmd_load {
+  if [[ $#argv != 0 ]] modules=("$argv[@]")
+
+  for module in $modules; do
+    echo module="'$module'"
+    if [[ -d "$(_bundle_path $module)" ]] ; then
+      pmodload_path "$install_path" "$(_bundle_dirname $module)"
+    fi
+  done
+}
+
+function _cmd_update {
+  if [[ $#argv != 0 ]] modules=("$argv[@]")
+
+  for module in $modules; do
+    echo module="'$module'"
+    if [[ -d "$(_bundle_path $module)" ]] ; then
+      (
+        set -e
+        cd "$(_bundle_path $module)"
+        git pull --ff-only
+        git submodule update --init --recursive
+      )
+    fi
+  done
+}
+
+function _cmd_help {
+  echo "bundle install|update|load [bundles]"
+}
+
+case "$argv[1]" in
+  install|update|load|help)
+    "_cmd_${argv[1]}" ${argv[2,-1]}
+    ;;
+  "")
+    _cmd_help
+    ;;
+  *)
+    #echo error "'$argv'"
+    _cmd_load ${argv}
+    ;;
+esac
