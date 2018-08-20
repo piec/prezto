@@ -64,6 +64,7 @@ path=(
 # Remove -X to enable it.
 if [[ -z "$LESS" ]]; then
   export LESS='-g -i -M -R -S -w -X -z-4'
+  #export LESS='-i -R -w -z-5'
 fi
 
 # Set the Less input preprocessor.
