@@ -40,7 +40,7 @@ prompt_fade_setup () {
   #PS1="%F{$fadebar_cwd}%B%K{$fadebar_cwd}%F{$userhost}%K{$fadebar_cwd}%B%n@%m%b%F{$fadebar_cwd}%K{black}%F{$date}%K{black}%B %D{%H:%M:%S}${flags} ${prompt_newline}: %F{$fadebar_cwd}%K{black}%B%~%b%k%f %#%F{black};%f"
   PS2="%F{$fadebar_cwd}%K{black}$schars[333]$schars[262]$schars[261]$schars[260]%f%k>"
 
-  prompt_opts=(cr subst percent)
+  prompt_opts=(cr subst percent sp)
 }
 
 prompt_fade_preview () {
